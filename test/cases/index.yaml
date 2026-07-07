@@ -1,0 +1,31 @@
+# Runnable examples on the landing page. Change-together rule: if the page's
+# example changes, this file changes in the same commit, and vice versa.
+page: src/content/docs/index.mdx
+cases:
+  - name: mapping at a glance — citation reshaping
+    mapping:
+      /citation/title: /title
+      /citation/doi:
+        source: /ids
+        find:
+          eq: { idType: doi }
+          pointer: /value
+      /citation/authors:
+        source: /contributors
+        each:
+          /family: /surname
+    input:
+      title: On Mapping
+      ids:
+        - { idType: issn, value: '2049-3630' }
+        - { idType: doi, value: 10.1000/xyz123 }
+      contributors:
+        - { surname: Hopper }
+        - { surname: Noether }
+    output:
+      citation:
+        title: On Mapping
+        doi: 10.1000/xyz123
+        authors:
+          - { family: Hopper }
+          - { family: Noether }

@@ -1,0 +1,81 @@
+---
+title: Mapper
+description: Declarative, portable document mapping — reshape structured data with a document, not code.
+template: splash
+hero:
+  tagline: Quickly transform your data
+  actions:
+    - text: Get started
+      link: tutorials/
+      icon: right-arrow
+    - text: Reference
+      link: reference/
+      icon: open-book
+      variant: minimal
+---
+
+import { LinkCard, CardGrid } from '@astrojs/starlight/components'
+
+## Mapping at a glance
+
+A mapping is itself a document, pairing each target location with the source
+that fills it:
+
+```yaml
+/citation/title: /title
+/citation/doi:
+  source: /ids
+  find:
+    eq: { idType: doi }
+    pointer: /value
+/citation/authors:
+  source: /contributors
+  each:
+    /family: /surname
+```
+
+Given an input:
+
+```json
+{
+  "title": "On Mapping",
+  "ids": [
+    { "idType": "issn", "value": "2049-3630" },
+    { "idType": "doi", "value": "10.1000/xyz123" }
+  ],
+  "contributors": [{ "surname": "Hopper" }, { "surname": "Noether" }]
+}
+```
+
+applying the mapping:
+
+```js
+import Mapper from '@christiansmith/mapper-js'
+
+const mapper = new Mapper({}, { initializers: {}, transformers: {}, plugins: {} })
+const { valid, errors, ...result } = await mapper.map(mapping, input)
+```
+
+produces:
+
+```json
+{
+  "citation": {
+    "title": "On Mapping",
+    "doi": "10.1000/xyz123",
+    "authors": [{ "family": "Hopper" }, { "family": "Noether" }]
+  }
+}
+```
+
+Every example in these docs, including this one, is executed against the
+published implementation as part of the site's test suite.
+
+## Find your way
+
+<CardGrid>
+  <LinkCard title="Tutorials" description="Learning-oriented lessons — from installation to an extended mapper, step by step." href="tutorials/" />
+  <LinkCard title="How-to guides" description="Task-oriented recipes for problems you already have." href="guides/" />
+  <LinkCard title="Reference" description="Information-oriented descriptions of every keyword, the context, and the API." href="reference/" />
+  <LinkCard title="Explanation" description="Understanding-oriented discussion of the mapping model and its design." href="explanation/" />
+</CardGrid>

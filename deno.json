@@ -1,0 +1,14 @@
+{
+  "nodeModulesDir": "auto",
+  "tasks": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "deno test --allow-read test/"
+  },
+  "imports": {
+    "@christiansmith/mapper-js": "jsr:@christiansmith/mapper-js@0.1.1",
+    "@std/assert": "jsr:@std/assert@^1.0.0",
+    "@std/yaml": "jsr:@std/yaml@^1.0.0"
+  }
+}
