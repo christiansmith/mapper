@@ -1,0 +1,21 @@
+# Runnable examples on the descriptor-forms page. Change-together rule: page
+# and cases change in the same commit.
+page: src/content/docs/reference/descriptor-forms.md
+cases:
+  - name: pointer string
+    mapping:
+      /title: /book/title
+    input: { book: { title: On Mapping } }
+    output: { title: On Mapping }
+
+  - name: object descriptor composes keywords
+    mapping:
+      /year: { source: /book/published, as: number }
+    input: { book: { published: '1998' } }
+    output: { year: 1998 }
+
+  - name: array descriptor tries alternatives
+    mapping:
+      /name: ['/nickname', '/fullName']
+    input: { nickname: Amazing Grace, fullName: Grace Hopper }
+    output: { name: Amazing Grace }

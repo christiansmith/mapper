@@ -19,7 +19,19 @@ export default defineConfig({
       sidebar: [
         { label: 'Tutorials', items: [{ autogenerate: { directory: 'tutorials' } }] },
         { label: 'How-to guides', items: [{ autogenerate: { directory: 'guides' } }] },
-        { label: 'Reference', items: [{ autogenerate: { directory: 'reference' } }] },
+        {
+          label: 'Reference',
+          items: [
+            'reference',
+            'reference/descriptor-forms',
+            { label: 'Keyword catalog', items: [{ autogenerate: { directory: 'reference/keywords' } }] },
+            'reference/json-pointer',
+            'reference/context',
+            'reference/errors',
+            'reference/api',
+            'reference/conformance',
+          ],
+        },
         { label: 'Explanation', items: [{ autogenerate: { directory: 'explanation' } }] },
       ],
     }),

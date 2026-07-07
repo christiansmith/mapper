@@ -1,0 +1,39 @@
+# Runnable examples on the registry keywords page. Change-together rule: page
+# and cases change in the same commit.
+page: src/content/docs/reference/keywords/registry.md
+cases:
+  - name: $ref substitutes a registered mapping
+    mappings:
+      'mapping:Kv':
+        $id: 'mapping:Kv'
+        mapping:
+          /key: /k
+          /value: /v
+    mapping:
+      $ref: 'mapping:Kv'
+    input: { k: a, v: 1 }
+    output: { key: a, value: 1 }
+
+  - name: $extend inherits the parent's pairings
+    mappings:
+      'mapping:Parent':
+        $id: 'mapping:Parent'
+        mapping:
+          /a: /a
+      'mapping:Child':
+        $id: 'mapping:Child'
+        $extend: 'mapping:Parent'
+        mapping:
+          /b: /b
+    mapping:
+      $ref: 'mapping:Child'
+    input: { a: 1, b: 2 }
+    output: { a: 1, b: 2 }
+
+  - name: description is inert
+    mapping:
+      /name:
+        source: /n
+        description: The display name.
+    input: { n: Ada }
+    output: { name: Ada }

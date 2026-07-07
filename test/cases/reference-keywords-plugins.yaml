@@ -1,0 +1,17 @@
+# Runnable examples on the plugin keywords page. The publishers plugin lives
+# in test/extensions.js. Change-together rule: page, extensions, and cases
+# change in the same commit.
+page: src/content/docs/reference/keywords/plugins.md
+cases:
+  - name: a plugin key calls the registered plugin
+    mapping:
+      /publisher: { source: /publisherId, publishers: {} }
+    input: { publisherId: p1 }
+    output:
+      publisher: { name: Mapping Press, city: Utrecht }
+
+  - name: pointer narrows the plugin result
+    mapping:
+      /publisherName: { source: /publisherId, publishers: { pointer: /name } }
+    input: { publisherId: p1 }
+    output: { publisherName: Mapping Press }

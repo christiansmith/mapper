@@ -1,0 +1,31 @@
+# Runnable examples on the structure keywords page. Change-together rule:
+# page and cases change in the same commit.
+page: src/content/docs/reference/keywords/structure.md
+cases:
+  - name: shorthand pairing builds structure
+    mapping:
+      /person/name: /n
+    input: { n: Ada }
+    output:
+      person: { name: Ada }
+
+  - name: nested mapping descends with a fresh target
+    mapping:
+      /out:
+        source: /data
+        mapping:
+          /name: /n
+    input: { data: { n: Ada } }
+    output:
+      out: { name: Ada }
+
+  - name: each maps every element
+    mapping:
+      /out:
+        source: /items
+        each:
+          /v: /n
+    input:
+      items: [{ n: 1 }, { n: 2 }]
+    output:
+      out: [{ v: 1 }, { v: 2 }]

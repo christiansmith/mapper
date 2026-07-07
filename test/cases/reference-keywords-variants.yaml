@@ -1,0 +1,37 @@
+# Runnable examples on the variant keywords page. Change-together rule: page
+# and cases change in the same commit.
+page: src/content/docs/reference/keywords/variants.md
+cases:
+  - name: array descriptor takes the first defined result
+    mapping:
+      /name: ['/nickname', '/fullName']
+    input: { fullName: Grace Hopper }
+    output: { name: Grace Hopper }
+
+  - name: first takes the first defined result
+    mapping:
+      /v: { first: ['/missing', '/b'] }
+    input: { b: 2 }
+    output: { v: 2 }
+
+  - name: last takes the last defined result
+    mapping:
+      /v: { last: ['/a', '/missing'] }
+    input: { a: 1 }
+    output: { v: 1 }
+
+  - name: all collects every defined result
+    mapping:
+      /v: { all: ['/a', '/b'] }
+    input: { a: 1, b: 2 }
+    output:
+      v: [1, 2]
+
+  - name: concat flattens one level
+    mapping:
+      /v: { all: ['/a', '/b'], concat: true }
+    input:
+      a: [1, 2]
+      b: [3]
+    output:
+      v: [1, 2, 3]

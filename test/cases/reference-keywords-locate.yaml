@@ -1,0 +1,36 @@
+# Runnable examples on the locate keywords page. Change-together rule: page
+# and cases change in the same commit.
+page: src/content/docs/reference/keywords/locate.md
+cases:
+  - name: source reads from the current scope
+    mapping:
+      /name: { source: /user/name }
+    input: { user: { name: Ada } }
+    output: { name: Ada }
+
+  - name: target reads what earlier pairings wrote
+    mapping:
+      /id: { constant: 7 }
+      /copy: { target: /id }
+    input: {}
+    output: { id: 7, copy: 7 }
+
+  - name: input reads from the root regardless of scope
+    mapping:
+      /out:
+        source: /nested
+        mapping:
+          /fromScope: /val
+          /fromRoot: { input: /rootVal }
+    input:
+      rootVal: R
+      nested: { val: V }
+    output:
+      out: { fromScope: V, fromRoot: R }
+
+  - name: output reads the root output produced so far
+    mapping:
+      /a: { constant: 1 }
+      /b: { output: /a }
+    input: {}
+    output: { a: 1, b: 1 }

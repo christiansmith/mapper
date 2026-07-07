@@ -1,0 +1,16 @@
+# Runnable examples on the validation keywords page. Change-together rule:
+# page and cases change in the same commit.
+page: src/content/docs/reference/keywords/validate.md
+cases:
+  - name: passing constraints are silent
+    mapping:
+      /age: { source: /age, type: number, minimum: 0 }
+    input: { age: 41 }
+    output: { age: 41 }
+
+  - name: a failing constraint reports and empties the result
+    mapping:
+      /age: { source: /age, minimum: 21 }
+    input: { age: 16 }
+    errors:
+      - { source: /age, value: 16, minimum: 21, message: cannot be less than 21 }

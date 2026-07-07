@@ -1,0 +1,24 @@
+# Runnable examples on the JSON Pointer profile page. Change-together rule:
+# page and cases change in the same commit.
+page: src/content/docs/reference/json-pointer.md
+cases:
+  - name: fragment pointer form reads
+    mapping:
+      /v: { source: '#/a/b' }
+    input: { a: { b: 5 } }
+    output: { v: 5 }
+
+  - name: writes create intermediate containers
+    mapping:
+      /book/author/name: /author
+    input: { author: Hopper }
+    output:
+      book: { author: { name: Hopper } }
+
+  - name: the - token appends to an array
+    mapping:
+      /list: { constant: [1, 2] }
+      /list/-: { constant: 3 }
+    input: {}
+    output:
+      list: [1, 2, 3]

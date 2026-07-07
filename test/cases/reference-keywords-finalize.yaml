@@ -1,0 +1,21 @@
+# Runnable examples on the finalize keywords page. Change-together rule: page
+# and cases change in the same commit.
+page: src/content/docs/reference/keywords/finalize.md
+cases:
+  - name: default fills undefined
+    mapping:
+      /v: { source: /missing, default: fallback }
+    input: {}
+    output: { v: fallback }
+
+  - name: as coerces to string
+    mapping:
+      /n: { source: /n, as: string }
+    input: { n: 7 }
+    output: { n: '7' }
+
+  - name: regexp_i wraps as a case-insensitive regex source
+    mapping:
+      /re: { source: /s, regexp_i: true }
+    input: { s: abc }
+    output: { re: '/abc/i' }

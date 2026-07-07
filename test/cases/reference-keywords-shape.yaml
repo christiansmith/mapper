@@ -1,0 +1,58 @@
+# Runnable examples on the shape keywords page. The placeholder initializer
+# and slugify transformer live in test/extensions.js. Change-together rule:
+# page, extensions, and cases change in the same commit.
+page: src/content/docs/reference/keywords/shape.md
+cases:
+  - name: switch selects a case by branch key
+    mapping:
+      /x:
+        source: /
+        switch:
+          source: /kind
+          cases:
+            a: /valA
+            b: /valB
+    input: { kind: b, valA: 1, valB: 2 }
+    output: { x: 2 }
+
+  - name: find selects by equality and narrows by pointer
+    mapping:
+      /doi:
+        source: /ids
+        find:
+          eq: { t: doi }
+          pointer: /v
+    input:
+      ids:
+        - { t: issn, v: '2049-3630' }
+        - { t: doi, v: 10.1000/x }
+    output: { doi: 10.1000/x }
+
+  - name: init supplies an absent value
+    mapping:
+      /subtitle: { source: /subtitle, init: placeholder }
+    input: {}
+    output: { subtitle: TBD }
+
+  - name: constant replaces unconditionally
+    mapping:
+      /v: { source: /a, constant: fixed }
+    input: { a: 1 }
+    output: { v: fixed }
+
+  - name: template substitutes mapped parameters
+    mapping:
+      /greeting:
+        source: /p
+        template: 'Hi {{n}}!'
+        mapping:
+          /n: /first
+    input:
+      p: { first: Ada }
+    output: { greeting: 'Hi Ada!', n: Ada }
+
+  - name: transform applies a named transformer
+    mapping:
+      /slug: { source: /name, transform: slugify }
+    input: { name: On Mapping }
+    output: { slug: on-mapping }

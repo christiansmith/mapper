@@ -1,0 +1,10 @@
+# Runnable example on the error-model page. Change-together rule: page and
+# cases change in the same commit.
+page: src/content/docs/reference/errors.md
+cases:
+  - name: required on a missing value reports and empties the result
+    mapping:
+      /book/isbn: { source: /isbn, required: true }
+    input: {}
+    errors:
+      - { source: /isbn, required: true, message: required value }

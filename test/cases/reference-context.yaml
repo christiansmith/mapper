@@ -1,0 +1,14 @@
+# Runnable example on the context page (the shift walk derives from this
+# case). Change-together rule: page and cases change in the same commit.
+page: src/content/docs/reference/context.md
+cases:
+  - name: each rebinds source and target per element
+    mapping:
+      /out:
+        source: /items
+        each:
+          /v: /n
+    input:
+      items: [{ n: 1 }, { n: 2 }]
+    output:
+      out: [{ v: 1 }, { v: 2 }]
