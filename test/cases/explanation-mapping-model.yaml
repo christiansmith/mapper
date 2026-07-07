@@ -1,0 +1,17 @@
+# Runnable example on the mapping-model page. Change-together rule: page and
+# cases change in the same commit.
+page: src/content/docs/explanation/mapping-model.md
+cases:
+  - name: later pairings read earlier writes
+    mapping:
+      /a: { constant: 1 }
+      /b: { output: /a }
+    input: {}
+    output: { a: 1, b: 1 }
+
+  - name: reversed, the read finds nothing yet
+    mapping:
+      /b: { output: /a }
+      /a: { constant: 1 }
+    input: {}
+    output: { a: 1 }

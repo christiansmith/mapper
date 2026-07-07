@@ -47,3 +47,25 @@ content is hand-authored — don't reflow it mechanically.
   [SPEC.md](https://github.com/christiansmith/mapper-js/blob/main/SPEC.md)).
   Write prose about the language; put implementation-specific code in code
   blocks structured so tabs for other implementations can be added later.
+- **Cite the spec for normative claims.** When a page states what Mapper
+  MUST do (as opposed to what the released package does), link the SPEC
+  section, and the requirement ID where one exists. Released-behavior
+  divergences get a `:::caution` naming the version and, where listed, the
+  Appendix A row.
+
+## Multi-language examples (ahead of the second implementation)
+
+Implementations in other languages will share these docs. Conventions, in
+force now so the structure is ready:
+
+- Mapping, input, and output blocks are language-independent. Never put them
+  in language tabs.
+- Host-code blocks (construction, invocation, extensions) are
+  language-specific. When a second implementation lands, wrap them in
+  Starlight `<Tabs syncKey="lang">` with JavaScript (Deno) as the first tab;
+  until then, plain fences.
+- Each language tab's runnable examples get their own corpus and runner,
+  executed against that language's published package. The change-together
+  rule applies per tab.
+- Install and setup steps live in tutorials only; guides and reference assume
+  a working installation and stay as language-free as the material allows.
