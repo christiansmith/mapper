@@ -1,7 +1,10 @@
 // Extensions defined in the tutorials, exactly as shown on the pages.
 // Change-together rule: a page's extension code and this file change in the
 // same commit.
-export const initializers = {}
+export const initializers = {
+  // src/content/docs/guides/write-extensions.md
+  placeholder: (value) => (value === undefined ? 'TBD' : value)
+}
 
 export const transformers = {
   // src/content/docs/tutorials/extending-the-mapper.md — step 1
@@ -22,5 +25,12 @@ export const plugins = {
       p2: { name: 'Pointer House', city: 'Reykjavík' }
     }
     return directory[value]
+  },
+  // src/content/docs/guides/fetch-remote-data.md
+  catalog: async (options, value) => {
+    const rows = {
+      books: { b1: { title: 'On Mapping', year: 1998 } }
+    }
+    return rows[value?.type]?.[value?.id]
   }
 }

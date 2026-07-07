@@ -1,0 +1,23 @@
+# Runnable examples in the validate-output guide. Change-together rule: page
+# and cases change in the same commit.
+page: src/content/docs/guides/validate-output.md
+cases:
+  - name: valid input passes with the gap filled
+    mapping: &validate-mapping
+      /profile/handle: { source: /handle, required: true, minLength: 3, pattern: '^[a-z0-9-]+$' }
+      /profile/plan: { source: /plan, default: free }
+      /profile/seats: { source: /seats, type: number, minimum: 1 }
+    input:
+      handle: ada-1
+      seats: 2
+    output:
+      profile: { handle: ada-1, plan: free, seats: 2 }
+
+  - name: invalid handle fails both constraints with no partial output
+    mapping: *validate-mapping
+    input:
+      handle: A!
+      seats: 2
+    errors:
+      - { source: /handle, value: A!, minLength: 3, message: cannot be less than 3 characters }
+      - { source: /handle, value: A!, pattern: '^[a-z0-9-]+$', message: must match pattern }

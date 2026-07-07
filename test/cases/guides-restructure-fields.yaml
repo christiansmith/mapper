@@ -1,0 +1,25 @@
+# Runnable examples in the restructure-fields guide. Change-together rule:
+# page and cases change in the same commit.
+page: src/content/docs/guides/restructure-fields.md
+cases:
+  - name: flatten a nested input
+    mapping:
+      /title: /book/title
+      /author: /book/author/name
+      /year: { source: /book/published, as: number }
+    input:
+      book: { title: On Mapping, author: { name: Hopper }, published: '1998' }
+    output:
+      title: On Mapping
+      author: Hopper
+      year: 1998
+
+  - name: nest a flat input
+    mapping:
+      /book/title: /title
+      /book/author/name: /author
+    input:
+      title: On Mapping
+      author: Hopper
+    output:
+      book: { title: On Mapping, author: { name: Hopper } }

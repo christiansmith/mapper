@@ -1,0 +1,17 @@
+# Runnable examples in the handle-errors guide. Change-together rule: page
+# and cases change in the same commit.
+page: src/content/docs/guides/handle-errors.md
+cases:
+  - name: a failed constraint reports and empties the result
+    mapping:
+      /book/isbn: { source: /isbn, required: true }
+    input: {}
+    errors:
+      - { source: /isbn, required: true, message: required value }
+
+  - name: a satisfied constraint passes through
+    mapping:
+      /book/isbn: { source: /isbn, required: true }
+    input: { isbn: 978-3-16-148410-0 }
+    output:
+      book: { isbn: 978-3-16-148410-0 }

@@ -6,6 +6,8 @@
 // Case shape: { name, mapping, input, output } for a successful mapping, or
 // { name, mapping, input, errors } for one that must fail validation (the
 // envelope reports the errors and the result is empty — no partial output).
+// A case may carry `mappings`, a registry passed to the constructor for
+// $ref/$extend resolution.
 import { parse } from '@std/yaml'
 import { assertEquals } from '@std/assert'
 import Mapper from '@christiansmith/mapper-js'
@@ -18,7 +20,7 @@ for await (const entry of Deno.readDir(casesDir)) {
   const { page, cases } = parse(await Deno.readTextFile(new URL(entry.name, casesDir)))
   for (const c of cases) {
     Deno.test(`${page} — ${c.name}`, async () => {
-      const mapper = new Mapper({}, { initializers, transformers, plugins })
+      const mapper = new Mapper({ mappings: structuredClone(c.mappings ?? {}) }, { initializers, transformers, plugins })
       const { valid, errors, ...result } = await mapper.map(structuredClone(c.mapping), structuredClone(c.input))
       if (c.errors) {
         assertEquals(valid, false)

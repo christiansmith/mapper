@@ -1,0 +1,44 @@
+# Runnable examples in the map-arrays guide. Change-together rule: page and
+# cases change in the same commit.
+page: src/content/docs/guides/map-arrays.md
+cases:
+  - name: each maps every element with a default
+    mapping:
+      /people:
+        source: /contributors
+        each:
+          /name: /fullName
+          /role: { source: /role, default: author }
+    input:
+      contributors:
+        - { fullName: Grace Hopper, role: editor }
+        - { fullName: Emmy Noether }
+    output:
+      people:
+        - { name: Grace Hopper, role: editor }
+        - { name: Emmy Noether, role: author }
+
+  - name: read one element by index
+    mapping:
+      /lead: /contributors/0/fullName
+    input:
+      contributors:
+        - { fullName: Grace Hopper }
+        - { fullName: Emmy Noether }
+    output:
+      lead: Grace Hopper
+
+  - name: array descriptor falls back across fields per element
+    mapping:
+      /people:
+        source: /contributors
+        each:
+          /name: ['/nickname', '/fullName']
+    input:
+      contributors:
+        - { nickname: Amazing Grace, fullName: Grace Hopper }
+        - { fullName: Emmy Noether }
+    output:
+      people:
+        - { name: Amazing Grace }
+        - { name: Emmy Noether }

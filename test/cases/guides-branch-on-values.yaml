@@ -1,0 +1,35 @@
+# Runnable examples in the branch-on-values guide. Change-together rule: page
+# and cases change in the same commit.
+page: src/content/docs/guides/branch-on-values.md
+cases:
+  - name: switch selects the video case
+    mapping: &switch-mapping
+      /entry:
+        switch:
+          source: /kind
+          cases:
+            video:
+              source: /
+              mapping:
+                /title: /title
+                /minutes: { source: /duration, as: number }
+            article:
+              source: /
+              mapping:
+                /title: /title
+                /pages: { source: /pageCount, as: number }
+    input:
+      kind: video
+      title: Mapping Live
+      duration: '12'
+    output:
+      entry: { title: Mapping Live, minutes: 12 }
+
+  - name: switch selects the article case
+    mapping: *switch-mapping
+    input:
+      kind: article
+      title: On Mapping
+      pageCount: '8'
+    output:
+      entry: { title: On Mapping, pages: 8 }

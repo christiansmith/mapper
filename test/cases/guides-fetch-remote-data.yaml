@@ -1,0 +1,15 @@
+# Runnable examples in the fetch-remote-data guide. The catalog plugin these
+# cases call is defined in test/extensions.js, exactly as shown on the page.
+# Change-together rule: page, extensions, and cases change in the same commit.
+page: src/content/docs/guides/fetch-remote-data.md
+cases:
+  - name: pairings accumulate params, the plugin reads them back
+    mapping:
+      /params/type: { constant: books }
+      /params/id: /request/bookId
+      /book: { output: /params, catalog: {} }
+    input:
+      request: { bookId: b1 }
+    output:
+      params: { type: books, id: b1 }
+      book: { title: On Mapping, year: 1998 }

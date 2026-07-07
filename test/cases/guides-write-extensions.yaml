@@ -1,0 +1,22 @@
+# Runnable examples in the write-extensions guide. The extensions these cases
+# call are defined in test/extensions.js, exactly as shown on the page.
+# Change-together rule: page, extensions, and cases change in the same commit.
+page: src/content/docs/guides/write-extensions.md
+cases:
+  - name: transformer — slugify by name
+    mapping:
+      /slug: { source: /name, transform: slugify }
+    input: { name: On Mapping }
+    output: { slug: on-mapping }
+
+  - name: initializer — placeholder fills an absent value
+    mapping:
+      /subtitle: { source: /subtitle, init: placeholder }
+    input: { name: On Mapping }
+    output: { subtitle: TBD }
+
+  - name: plugin — publishers with pointer narrowing
+    mapping:
+      /publisher: { source: /publisherId, publishers: { pointer: /name } }
+    input: { publisherId: p1 }
+    output: { publisher: Mapping Press }
