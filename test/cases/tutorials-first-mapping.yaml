@@ -1,0 +1,50 @@
+# Runnable examples in the first-mapping tutorial. Change-together rule: if
+# the page's examples change, this file changes in the same commit, and vice
+# versa.
+page: src/content/docs/tutorials/first-mapping.md
+cases:
+  - name: steps 2–4 — reshape a legacy record
+    mapping:
+      /book/title: /name
+      /book/year: { source: /published, as: number }
+      /book/language: { source: /lang, default: en }
+    input:
+      name: The Compleat Mapper
+      published: '1998'
+      shelf: B4
+    output:
+      book:
+        title: The Compleat Mapper
+        year: 1998
+        language: en
+
+  - name: step 5 — required isbn fails with no partial output
+    mapping:
+      /book/title: /name
+      /book/year: { source: /published, as: number }
+      /book/language: { source: /lang, default: en }
+      /book/isbn: { source: /isbn, required: true }
+    input:
+      name: The Compleat Mapper
+      published: '1998'
+      shelf: B4
+    errors:
+      - { source: /isbn, required: true, message: required value }
+
+  - name: step 5 — fixed input goes green again
+    mapping:
+      /book/title: /name
+      /book/year: { source: /published, as: number }
+      /book/language: { source: /lang, default: en }
+      /book/isbn: { source: /isbn, required: true }
+    input:
+      name: The Compleat Mapper
+      published: '1998'
+      shelf: B4
+      isbn: 978-3-16-148410-0
+    output:
+      book:
+        title: The Compleat Mapper
+        year: 1998
+        language: en
+        isbn: 978-3-16-148410-0

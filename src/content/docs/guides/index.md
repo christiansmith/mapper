@@ -1,6 +1,6 @@
 ---
 title: How-to guides
-description: Task-oriented recipes — each one solves a problem you already have.
+description: Task-oriented recipes. Each one solves a problem you already have.
 sidebar:
   order: 0
 ---

@@ -1,0 +1,31 @@
+# Runnable examples in the extending-the-mapper tutorial. The transformer and
+# plugin these cases call are defined in test/extensions.js, exactly as shown
+# on the page. Change-together rule: page, extensions, and cases change in
+# the same commit.
+page: src/content/docs/tutorials/extending-the-mapper.md
+cases:
+  - name: step 1 — a named transformer slugifies
+    mapping:
+      /book/title: /name
+      /book/slug: { source: /name, transform: slugify }
+    input: { name: On Mapping }
+    output:
+      book:
+        title: On Mapping
+        slug: on-mapping
+
+  - name: step 2 — a plugin replaces the value
+    mapping:
+      /book/publisher: { source: /publisherId, publishers: {} }
+    input: { name: On Mapping, publisherId: p1 }
+    output:
+      book:
+        publisher: { name: Mapping Press, city: Utrecht }
+
+  - name: step 3 — pointer narrows the plugin result
+    mapping:
+      /book/publisherName: { source: /publisherId, publishers: { pointer: /name } }
+    input: { name: On Mapping, publisherId: p1 }
+    output:
+      book:
+        publisherName: Mapping Press

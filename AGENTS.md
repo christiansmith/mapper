@@ -36,10 +36,12 @@ content is hand-authored — don't reflow it mechanically.
   Bumping it is a deliberate act, not a side effect.
 - **Synthetic examples only.** No example data derived from real deployments,
   clients, or third parties.
-- **Base-path portability.** The site serves under a base path. Never
-  hardcode the site root in content or components — use relative links in
-  pages and base-aware helpers in components, so the base can change in
-  config alone.
+- **Internal links include the base.** Write every internal link
+  base-absolute (`/mapper/tutorials/first-mapping/`) — Astro does not prefix
+  Markdown, hero, or component links, and relative links break on
+  trailing-slash-less URLs (which the dev server itself hands out). If the
+  base ever changes, it's one mechanical find-and-replace across
+  `src/content/`; verify with the URL audit in `deno task test`.
 - **Language-neutral prose.** Mapper is specified independently of any one
   implementation (see
   [SPEC.md](https://github.com/christiansmith/mapper-js/blob/main/SPEC.md)).

@@ -1,0 +1,63 @@
+# Runnable examples in the mapping-collections tutorial. Change-together
+# rule: if the page's examples change, this file changes in the same commit,
+# and vice versa.
+page: src/content/docs/tutorials/mapping-collections.md
+cases:
+  - name: step 2 — each maps every element
+    mapping:
+      /catalog/books:
+        source: /records
+        each:
+          /title: /name
+          /year: { source: /published, as: number }
+    input: &collection-input
+      records:
+        - { name: On Mapping, published: '1998', featured: true }
+        - { name: Pointers Everywhere, published: '2004' }
+        - { name: The Fan-Out, published: '2011' }
+    output:
+      catalog:
+        books: &mapped-books
+          - { title: On Mapping, year: 1998 }
+          - { title: Pointers Everywhere, year: 2004 }
+          - { title: The Fan-Out, year: 2011 }
+
+  - name: steps 3–4 — find picks one, later pairings read earlier writes
+    mapping:
+      /catalog/books:
+        source: /records
+        each:
+          /title: /name
+          /year: { source: /published, as: number }
+      /catalog/featured:
+        source: /records
+        find:
+          eq: { featured: true }
+          pointer: /name
+      /banner/headline: { output: /catalog/featured }
+    input: *collection-input
+    output:
+      catalog:
+        books: *mapped-books
+        featured: On Mapping
+      banner:
+        headline: On Mapping
+
+  - name: step 4 — moved to the top, the output read finds nothing
+    mapping:
+      /banner/headline: { output: /catalog/featured }
+      /catalog/books:
+        source: /records
+        each:
+          /title: /name
+          /year: { source: /published, as: number }
+      /catalog/featured:
+        source: /records
+        find:
+          eq: { featured: true }
+          pointer: /name
+    input: *collection-input
+    output:
+      catalog:
+        books: *mapped-books
+        featured: On Mapping
