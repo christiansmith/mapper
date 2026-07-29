@@ -108,5 +108,6 @@ See [Write extensions](/mapper/guides/write-extensions/) for the signature.
 ## random and unique
 
 Experimental. `random` selects a random member; `unique` avoids repeats
-across calls. Both are nondeterministic, so they carry no tested example and
-no portability guarantee.
+across calls. Requesting more unique members than the array holds distinct
+values is a diagnostic. Both keywords are nondeterministic, so they carry no
+tested example and no portability guarantee.

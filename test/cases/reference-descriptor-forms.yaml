@@ -19,3 +19,10 @@ cases:
       /name: ['/nickname', '/fullName']
     input: { nickname: Amazing Grace, fullName: Grace Hopper }
     output: { name: Amazing Grace }
+
+  - name: an unrecognized string is diagnosed
+    mapping:
+      /v: not a pointer
+    input: { a: 1 }
+    errors:
+      - { descriptor: not a pointer, message: unrecognized string descriptor }

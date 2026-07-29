@@ -40,11 +40,8 @@ Constraints validate. `default` finalizes: it runs after validation and only
 fills `undefined`. `as` coerces the type before validation keywords see the
 value.
 
-:::caution
-In mapper-js 0.1.1, `minLength`, `maxLength`, and `pattern` expect the value
-to exist. On a missing value they throw instead of reporting. Use `required`
-alone for fields that may be absent, and reserve shape constraints for values
-you know arrive.
-:::
+Constraints check values that exist. A missing value fails nothing except
+`required`, so constrain shape freely and add `required: true` where absence
+itself is the error.
 
 See [Handle errors](/mapper/guides/handle-errors/) for reading the envelope.

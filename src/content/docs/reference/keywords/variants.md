@@ -16,6 +16,19 @@ result wins:
 /name: ['/nickname', '/fullName']
 ```
 
+Defined is the test, not truthy. An alternative that reads `0`, `""`, or
+`false` wins over a later one:
+
+```yaml
+/v: ['/zero', '/one']
+```
+
+```json
+{ "zero": 0, "one": 1 }
+```
+
+writes `0`.
+
 ## first
 
 Core. Explicit form of the array descriptor: the first defined result.

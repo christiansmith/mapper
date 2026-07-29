@@ -35,6 +35,9 @@ with the registry entry:
 
 and input `{ "k": "a", "v": 1 }` produces `{ "key": "a", "value": 1 }`.
 
+A `$ref` to an id the registry does not hold is a diagnostic naming the id,
+not a silent miss.
+
 ## $extend
 
 Core. Inherits a registered mapping's pairings. Ancestors resolve
@@ -49,7 +52,8 @@ overrides the ancestor's, in the child's position.
     /b: /b
 ```
 
-Applying `mapping:Child` maps the parent's pairings and then `/b`.
+Applying `mapping:Child` maps the parent's pairings and then `/b`. Naming an
+ancestor the registry does not hold is an error at registration.
 
 ## description
 

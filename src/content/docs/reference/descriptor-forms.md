@@ -34,8 +34,23 @@ An array tries alternatives per evaluation:
 ```
 
 Relative references belong to the Extended tier and resolve against the
-current source path. Support in mapper-js 0.1.1 is partial; see the
+current source path; see the
 [JSON Pointer profile](/mapper/reference/json-pointer/).
 
 Name strings and `$ref` both reference the registry; see [Registry
 keywords](/mapper/reference/keywords/registry/).
+
+A string that is none of these forms is an error, not a read:
+
+```yaml
+/v: not a pointer
+```
+
+```yaml
+valid: false
+errors:
+  - { descriptor: not a pointer, message: unrecognized string descriptor }
+```
+
+The diagnostic names the string, so a typo fails loudly instead of quietly
+mapping the wrong thing.

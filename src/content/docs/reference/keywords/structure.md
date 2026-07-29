@@ -47,4 +47,5 @@ element.
 produces `{ "out": [{ "v": 1 }, { "v": 2 }] }`.
 
 Pairing order is still meaningful inside each element. Cross-element order is
-not: elements map independently.
+not: elements map independently. Every element maps, falsy ones included:
+`0`, `""`, `false`, and `null` each evaluate in their own position.

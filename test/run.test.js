@@ -24,9 +24,8 @@ for await (const entry of Deno.readDir(casesDir)) {
       const { valid, errors, ...result } = await mapper.map(structuredClone(c.mapping), structuredClone(c.input))
       if (c.errors) {
         assertEquals(valid, false)
-        // compare errors as JSON serializes them — the engine's error objects
-        // carry undefined-valued keys that never survive serialization, and
-        // the docs show what a reader printing the envelope sees
+        // compare errors as JSON serializes them — the docs show what a
+        // reader printing the envelope sees
         assertEquals(JSON.parse(JSON.stringify(errors)), c.errors)
         assertEquals(result, {})
       } else {

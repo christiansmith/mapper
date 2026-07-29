@@ -2,9 +2,9 @@
 # page and cases change in the same commit.
 page: src/content/docs/reference/json-pointer.md
 cases:
-  - name: fragment pointer form reads
+  - name: pointer read
     mapping:
-      /v: { source: '#/a/b' }
+      /v: /a/b
     input: { a: { b: 5 } }
     output: { v: 5 }
 
@@ -15,6 +15,21 @@ cases:
     output:
       book: { author: { name: Hopper } }
 
+  - name: an integer next token creates an array
+    mapping:
+      /tags/0: /primary
+    input: { primary: news }
+    output:
+      tags: [news]
+
+  - name: a beyond-length index clamps to the end
+    mapping:
+      /list: { constant: [1, 2] }
+      /list/5: { constant: 3 }
+    input: {}
+    output:
+      list: [1, 2, 3]
+
   - name: the - token appends to an array
     mapping:
       /list: { constant: [1, 2] }
@@ -22,3 +37,23 @@ cases:
     input: {}
     output:
       list: [1, 2, 3]
+
+  - name: dot-dot segments are diagnosed
+    mapping:
+      /v: /a/../b
+    input: { a: 1, b: 2 }
+    errors:
+      - { descriptor: /a/../b, message: pointer must not contain .. segments }
+
+  - name: a relative reference reads an element's neighbor
+    mapping:
+      /rows:
+        source: /items
+        each:
+          /label: /label
+          /currency: ../../currency
+    input:
+      currency: EUR
+      items: [{ label: a }, { label: b }]
+    output:
+      rows: [{ label: a, currency: EUR }, { label: b, currency: EUR }]

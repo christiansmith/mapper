@@ -8,6 +8,12 @@ cases:
     input: { fullName: Grace Hopper }
     output: { name: Grace Hopper }
 
+  - name: a defined falsy result wins
+    mapping:
+      /v: ['/zero', '/one']
+    input: { zero: 0, one: 1 }
+    output: { v: 0 }
+
   - name: first takes the first defined result
     mapping:
       /v: { first: ['/missing', '/b'] }

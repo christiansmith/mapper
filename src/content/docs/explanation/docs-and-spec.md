@@ -17,10 +17,10 @@ conformance suite. Implementers in any language work from the spec.
 **These docs describe.** They teach the language and document the released
 `@christiansmith/mapper-js` as it behaves, in Diataxis form: tutorials to
 learn by, guides to solve with, reference to look up, and these explanations.
-Where the released engine deviates from the spec, the docs describe the
-released behavior and mark it, as with the [validation
-caution](/mapper/reference/keywords/validate/). The full deviation list is
-SPEC Appendix A.
+Where the released engine falls short of the spec, the docs describe the
+released behavior and mark it, as with the [coercion
+caution](/mapper/reference/keywords/finalize/). The record of resolved and
+outstanding deviations is SPEC Appendix A.
 
 The two stay honest by the same mechanism. The spec's inline examples are
 executable cases in its conformance suite; every runnable example in these

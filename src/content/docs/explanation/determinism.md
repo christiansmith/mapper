@@ -30,8 +30,8 @@ The Core tier is the portable surface: any conforming implementation runs
 Core documents identically. Extended keywords are optional but exact where
 present. Experimental keywords carry no cross-implementation guarantee.
 
-For mapper-js specifically, the released engine deviates from the
-specification in a small number of listed ways (SPEC Appendix A). These docs
-describe released behavior and mark the deviations where they matter, and
-every example here runs against the published package, so what you read is
-what you get.
+For mapper-js specifically, the released engine conforms to the
+specification everywhere its conformance suite probes, as of 0.2.0. Two
+narrow diagnostics are still to come (SPEC Appendix A), and these docs mark
+them where they matter. Every example here runs against the published
+package, so what you read is what you get.

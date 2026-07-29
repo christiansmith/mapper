@@ -13,8 +13,8 @@ prescribes.
   descriptor takes.
 - [Keyword catalog](/mapper/reference/keywords/): every keyword by pipeline
   stage, with tier and a tested example.
-- [JSON Pointer profile](/mapper/reference/json-pointer/): pointers, the
-  fragment form, write semantics, appends.
+- [JSON Pointer profile](/mapper/reference/json-pointer/): pointers, write
+  semantics, array writes, relative references.
 - [Context and envelope](/mapper/reference/context/): the evaluator's working
   state and the result shape.
 - [Error model](/mapper/reference/errors/): accumulation, short-circuit, and

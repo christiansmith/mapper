@@ -14,3 +14,9 @@ cases:
     input: { age: 16 }
     errors:
       - { source: /age, value: 16, minimum: 21, message: cannot be less than 21 }
+
+  - name: constraints are silent on an absent value
+    mapping:
+      /v: { source: /missing, minLength: 3 }
+    input: {}
+    output: {}

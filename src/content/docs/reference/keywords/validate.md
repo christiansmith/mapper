@@ -50,8 +50,13 @@ Error objects carry the read location, the offending value, the constraint
 with its operand, and a message. See [Handle
 errors](/mapper/guides/handle-errors/).
 
-:::caution
-In mapper-js 0.1.1, `minLength`, `maxLength`, and `pattern` throw on a
-missing value instead of reporting. Use `required` alone for fields that may
-be absent.
-:::
+Constraints check values that exist. On an absent value they are silent, and
+only `required` reports the absence:
+
+```yaml
+/v: { source: /missing, minLength: 3 }
+```
+
+with an empty input writes nothing and reports nothing. Each constraint also
+checks only values of its own type: `minLength` ignores a number, `minimum`
+ignores a string.
