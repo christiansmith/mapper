@@ -22,8 +22,10 @@ const mapper = new Mapper(
 
 The first argument carries the mapping registry: an object whose `mappings`
 key maps `$id` strings to mapping documents, for `$ref` and `$extend`
-resolution. The second carries the three extension registries. Pass empty
-objects for anything unused.
+resolution. `$extend` resolves as each mapping registers, and resolution
+consumes the keyword: the registry stores the flattened mapping, which
+stands alone if serialized or re-registered. The second argument carries the
+three extension registries. Pass empty objects for anything unused.
 
 ## map
 

@@ -48,3 +48,36 @@ cases:
       name: Grace Hopper
       email: grace@example.com
       badge: E-1906
+
+
+  - name: $extend merges a list of ancestors in order
+    mappings:
+      'mapping:Person':
+        $id: 'mapping:Person'
+        source: /
+        mapping:
+          /name: /fullName
+          /email: /email
+      'mapping:Contact':
+        $id: 'mapping:Contact'
+        source: /
+        mapping:
+          /phone: /phone
+      'mapping:Employee':
+        $id: 'mapping:Employee'
+        $extend: ['mapping:Person', 'mapping:Contact']
+        source: /
+        mapping:
+          /badge: /badgeId
+    mapping:
+      $ref: 'mapping:Employee'
+    input:
+      fullName: Grace Hopper
+      email: grace@example.com
+      phone: 555-1906
+      badgeId: E-1906
+    output:
+      name: Grace Hopper
+      email: grace@example.com
+      phone: 555-1906
+      badge: E-1906

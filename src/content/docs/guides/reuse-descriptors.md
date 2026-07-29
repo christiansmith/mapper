@@ -72,3 +72,33 @@ const mappings = {
 ```
 
 Applying `{ $ref: 'mapping:Employee' }` maps `name`, `email`, and `badge`.
+
+`$extend` also takes a list. Ancestors merge in list order, later entries
+overriding earlier ones, and the extending mapping merges last:
+
+```js
+const mappings = {
+  'mapping:Person': { /* as above */ },
+  'mapping:Contact': {
+    $id: 'mapping:Contact',
+    source: '/',
+    mapping: {
+      '/phone': '/phone'
+    }
+  },
+  'mapping:Employee': {
+    $id: 'mapping:Employee',
+    $extend: ['mapping:Person', 'mapping:Contact'],
+    source: '/',
+    mapping: {
+      '/badge': '/badgeId'
+    }
+  }
+}
+```
+
+Now `mapping:Employee` maps `name`, `email`, `phone`, and `badge`. The
+registry stores each mapping flattened, with `$extend` already resolved, so
+a registered mapping can be serialized or re-registered on its own; see
+[Registry keywords](/mapper/reference/keywords/registry/) for the merge
+rules.

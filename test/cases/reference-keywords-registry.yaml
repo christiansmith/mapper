@@ -30,6 +30,45 @@ cases:
     input: { a: 1, b: 2 }
     output: { a: 1, b: 2 }
 
+  - name: ancestors merge in list order
+    mappings:
+      'mapping:Person':
+        $id: 'mapping:Person'
+        mapping:
+          /name: /fullName
+      'mapping:Contact':
+        $id: 'mapping:Contact'
+        mapping:
+          /email: /email
+      'mapping:Employee':
+        $id: 'mapping:Employee'
+        $extend: ['mapping:Person', 'mapping:Contact']
+        mapping:
+          /badge: /badgeId
+    mapping:
+      $ref: 'mapping:Employee'
+    input: { fullName: Grace Hopper, email: grace@example.com, badgeId: E-1906 }
+    output: { name: Grace Hopper, email: grace@example.com, badge: E-1906 }
+
+  - name: a later ancestor overrides an earlier one
+    mappings:
+      'mapping:A':
+        $id: 'mapping:A'
+        mapping:
+          /v: { constant: from A }
+      'mapping:B':
+        $id: 'mapping:B'
+        mapping:
+          /v: { constant: from B }
+      'mapping:C':
+        $id: 'mapping:C'
+        $extend: ['mapping:A', 'mapping:B']
+        mapping: {}
+    mapping:
+      $ref: 'mapping:C'
+    input: {}
+    output: { v: from B }
+
   - name: description is inert
     mapping:
       /name:
