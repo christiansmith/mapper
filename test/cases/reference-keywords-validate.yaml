@@ -20,3 +20,17 @@ cases:
       /v: { source: /missing, minLength: 3 }
     input: {}
     output: {}
+
+  - name: the pattern safety screen rejects nested quantifiers
+    validate: document
+    mapping:
+      mapping:
+        /code: { source: /code, pattern: '(a+)+$' }
+    report:
+      valid: false
+      errors:
+        - rule: KW-pattern-2
+          message: pattern must not quantify a group that contains a quantifier
+          pointer: /mapping/~1code/pattern
+          descriptor: (a+)+$
+      warnings: []

@@ -1,0 +1,14 @@
+# Runnable examples on the evaluation-scopes explanation page.
+# Change-together rule: page and cases change in the same commit.
+page: src/content/docs/explanation/evaluation-scopes.md
+cases:
+  - name: output reads see completed pairings only
+    mapping:
+      /params/type: { constant: books }
+      /params/id: /request/bookId
+      /query: { output: /params }
+    input:
+      request: { bookId: b1 }
+    output:
+      params: { type: books, id: b1 }
+      query: { type: books, id: b1 }

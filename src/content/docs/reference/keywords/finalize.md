@@ -36,7 +36,7 @@ an absent value, `as` writes nothing.
 
 :::caution
 `as: number` of a value that is not numeric yields `NaN`, which serializes
-as `null`, and mapper-js 0.2.0 reports no error. A diagnostic is planned
+as `null`, and mapper-js 0.3.2 reports no error. A diagnostic is planned
 (SPEC Appendix A, KW-as-1).
 :::
 

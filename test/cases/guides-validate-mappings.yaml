@@ -1,0 +1,45 @@
+# Runnable examples in the validate-mappings guide. Change-together rule:
+# page and cases change in the same commit.
+page: src/content/docs/guides/validate-mappings.md
+cases:
+  - name: a malformed operand reports at the document level
+    validate: document
+    mapping:
+      mapping:
+        /year: { source: /published, as: integer }
+    report:
+      valid: false
+      errors:
+        - rule: KW-pipeline-1
+          message: as must be string, number, boolean, or json
+          pointer: /mapping/~1year/as
+          descriptor: integer
+      warnings: []
+
+  - name: an unreachable transformer reports at the instance level
+    validate: instance
+    mapping:
+      mapping:
+        /slug: { source: /title, transform: sluggify }
+    report:
+      valid: false
+      errors:
+        - rule: KW-transform-1
+          message: sluggify matches no registered transformer
+          pointer: /mapping/~1slug/transform
+          descriptor: sluggify
+      warnings: []
+
+  - name: a misspelled plugin key warns without blocking
+    validate: instance
+    mapping:
+      mapping:
+        /book: { source: /id, requets: {} }
+    report:
+      valid: true
+      errors: []
+      warnings:
+        - rule: KW-2
+          message: requets matches no keyword or registered extension
+          pointer: /mapping/~1book/requets
+          descriptor: {}

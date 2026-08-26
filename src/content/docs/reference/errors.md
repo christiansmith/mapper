@@ -1,15 +1,34 @@
 ---
 title: Error model
-description: Accumulation, short-circuit, error-object anatomy, and host exceptions.
+description: Evaluation errors vs validation reports, accumulation, short-circuit, and host exceptions.
 sidebar:
   order: 4
 ---
+
+Mapper reports problems through two distinct shapes. **Evaluation errors**
+come from running a mapping against an input: they describe values, live in
+the result envelope, and empty the result. **Validation reports** come from
+checking a mapping document before any input exists: they describe positions
+in the mapping document and never involve a result. This page covers evaluation
+errors; for the report, see [Mapping
+validation](/mapper/reference/validation/).
+
+| | Evaluation error | Validation diagnostic |
+|---|---|---|
+| Produced by | `mapper.map` | `validate` / `mapper.validate` |
+| Describes | a value that failed a constraint | a node of the mapping document |
+| Located by | the pointer the pairing read | a pointer into the mapping document |
+| Carries | constraint, offending value, message | `rule` id, offending node, message |
+| Consequence | `valid: false`, result emptied | `valid: false` in the report; nothing evaluated |
+
+A mapping that validates clean can still produce evaluation errors. No
+static check knows what the input will hold.
 
 ## Accumulation and short-circuit
 
 Constraints append error objects as they fail. Within a pairing, every failed
 constraint reports. After a pairing, any accumulated error short-circuits the
-invocation: remaining pairings still in the document do not change the fact
+invocation: remaining pairings still in the mapping do not change the fact
 that the result is empty. There is no partial output.
 
 ```yaml

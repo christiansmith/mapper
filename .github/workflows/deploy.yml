@@ -22,7 +22,7 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - run: deno install --allow-scripts=npm:sharp
+      - run: deno install --allow-scripts=npm:sharp --minimum-dependency-age=0
       - run: deno task test
       - run: deno task build
       - uses: actions/upload-pages-artifact@v3

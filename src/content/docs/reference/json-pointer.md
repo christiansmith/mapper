@@ -56,7 +56,7 @@ produces `{ "list": [1, 2, 3] }`, not a sparse array.
 
 :::caution
 Writing into an existing array with a token that is not an index reports no
-problem in mapper-js 0.2.0: the write lands at index 0 and shifts the rest.
+problem in mapper-js 0.3.2: the write lands at index 0 and shifts the rest.
 A diagnostic is planned (SPEC Appendix A, PTR-6).
 :::
 
@@ -87,6 +87,29 @@ errors:
 ```
 
 To reach a neighbor, use a relative reference.
+
+## Fragment strings
+
+The URI fragment form (`#/a/b`) is not mapping grammar. Pointers stand alone
+in mapping documents, never embedded in URIs, so the `#` prefix has no
+meaning there; the exclusion is normative as of SPEC §4.2. Evaluation
+diagnoses a fragment string as an unrecognized descriptor, and [mapping
+validation](/mapper/reference/validation/) reports it:
+
+```yaml
+mapping:
+  /v: '#/a'
+```
+
+```yaml
+valid: false
+errors:
+  - rule: DOC-2
+    message: fragment pointers are not valid mapping grammar; use the plain pointer form
+    pointer: /mapping/~1v
+    descriptor: '#/a'
+warnings: []
+```
 
 ## Relative references
 

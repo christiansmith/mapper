@@ -12,3 +12,21 @@ cases:
       items: [{ n: 1 }, { n: 2 }]
     output:
       out: [{ v: 1 }, { v: 2 }]
+
+  - name: the four scopes read from their own roots
+    mapping:
+      /currency: /currency
+      /rows:
+        source: /items
+        each:
+          /n: /n
+          /currency: { output: /currency }
+          /copy: { target: /n }
+    input:
+      currency: EUR
+      items: [{ n: 1 }, { n: 2 }]
+    output:
+      currency: EUR
+      rows:
+        - { n: 1, currency: EUR, copy: 1 }
+        - { n: 2, currency: EUR, copy: 2 }

@@ -1,14 +1,15 @@
 ---
 title: Mapper class API
-description: Construction, registries, and the map method.
+description: Construction, registries, the map method, and the validate operation.
 sidebar:
-  order: 5
+  order: 6
 ---
 
-`@christiansmith/mapper-js` exports one class.
+`@christiansmith/mapper-js` exports the `Mapper` class as its default and the
+`validate` function by name.
 
 ```js
-import Mapper from '@christiansmith/mapper-js'
+import Mapper, { validate } from '@christiansmith/mapper-js'
 ```
 
 ## Constructor
@@ -47,3 +48,18 @@ const mapping = parse(await Deno.readTextFile('mapping.yaml'))
 For descriptor grammar, start at [Descriptor
 forms](/mapper/reference/descriptor-forms/) and the [keyword
 catalog](/mapper/reference/keywords/).
+
+## validate
+
+```js
+const report = validate(mapping) // well-formedness
+const report = mapper.validate(mapping) // adds reachability
+```
+
+Both return the report `{ valid, errors, warnings }` synchronously and never
+throw. The named export checks the mapping document's own form; the method also
+checks every referenced name against the instance's registries. Hand either
+one a descriptor object with pairings under `mapping:`; unlike `map`,
+`validate` does not wrap a bare pairing map. Details, diagnostic anatomy, and
+the wrapped-form caution: [Mapping
+validation](/mapper/reference/validation/).

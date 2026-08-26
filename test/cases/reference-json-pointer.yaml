@@ -57,3 +57,17 @@ cases:
       items: [{ label: a }, { label: b }]
     output:
       rows: [{ label: a, currency: EUR }, { label: b, currency: EUR }]
+
+  - name: validation reports a fragment string
+    validate: document
+    mapping:
+      mapping:
+        /v: '#/a'
+    report:
+      valid: false
+      errors:
+        - rule: DOC-2
+          message: fragment pointers are not valid mapping grammar; use the plain pointer form
+          pointer: /mapping/~1v
+          descriptor: '#/a'
+      warnings: []

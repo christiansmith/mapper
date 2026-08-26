@@ -15,6 +15,32 @@ cases:
     input: { kind: b, valA: 1, valB: 2 }
     output: { x: 2 }
 
+  - name: branching on local state composes target locate with switch.source
+    mapping:
+      /type: /kind
+      /label:
+        target: /type
+        switch:
+          source: /
+          cases:
+            book: { constant: Book }
+            film: { constant: Film }
+    input: { kind: film }
+    output: { type: film, label: Film }
+
+  - name: switch.target is not a scope key — the value passes through
+    mapping:
+      /type: /kind
+      /label:
+        target: /type
+        switch:
+          target: /
+          cases:
+            film: { constant: Film }
+            default: { constant: Unknown }
+    input: { kind: film }
+    output: { type: film, label: film }
+
   - name: find selects by equality and narrows by pointer
     mapping:
       /doi:

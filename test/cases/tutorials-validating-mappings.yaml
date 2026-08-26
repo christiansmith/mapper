@@ -1,0 +1,61 @@
+# Runnable examples in the validating-mappings tutorial. The slugify
+# transformer lives in test/extensions.js, exactly as the extending-the-mapper
+# tutorial defines it. Change-together rule: page, extensions, and cases
+# change in the same commit.
+page: src/content/docs/tutorials/validating-mappings.md
+cases:
+  - name: step 2 — the document-level report finds the bad operand only
+    validate: document
+    mapping:
+      mapping:
+        /post/title: /title
+        /post/slug: { source: /title, transform: sluggify }
+        /post/words: { source: /words, as: integer }
+    report:
+      valid: false
+      errors:
+        - rule: KW-pipeline-1
+          message: as must be string, number, boolean, or json
+          pointer: /mapping/~1post~1words/as
+          descriptor: integer
+      warnings: []
+
+  - name: step 3 — the instance-level report finds the transformer typo
+    validate: instance
+    mapping:
+      mapping:
+        /post/title: /title
+        /post/slug: { source: /title, transform: sluggify }
+        /post/words: { source: /words, as: number }
+    report:
+      valid: false
+      errors:
+        - rule: KW-transform-1
+          message: sluggify matches no registered transformer
+          pointer: /mapping/~1post~1slug/transform
+          descriptor: sluggify
+      warnings: []
+
+  - name: step 4 — the corrected document validates clean
+    validate: instance
+    mapping:
+      mapping:
+        /post/title: /title
+        /post/slug: { source: /title, transform: slugify }
+        /post/words: { source: /words, as: number }
+    report: { valid: true, errors: [], warnings: [] }
+
+  - name: step 5 — the gated evaluation produces the post
+    mapping:
+      mapping:
+        /post/title: /title
+        /post/slug: { source: /title, transform: slugify }
+        /post/words: { source: /words, as: number }
+    input:
+      title: Maps All the Way Down
+      words: '1200'
+    output:
+      post:
+        title: Maps All the Way Down
+        slug: maps-all-the-way-down
+        words: 1200

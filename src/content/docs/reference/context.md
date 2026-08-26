@@ -33,6 +33,57 @@ and `paths`.** Watch it on `each` over `/items` with input
 Because `errors` and the roots are shared, a deep validation failure reaches
 the envelope, and `output:` reads see everything written so far.
 
+## What a scoped pointer reads
+
+Four scope names recur across the language: on locate keywords, inside
+`switch`, and in extension options such as the request plugin's `url`. A
+pointer read against a scope always means the same thing:
+
+| Scope | Reads from |
+|---|---|
+| `source` | the pipeline value: the context's source as refined by the descriptor's own locate, dispatch, and any earlier plugin in the chain |
+| `target` | the object under construction at the current level |
+| `input` | the root input, shared at every level |
+| `output` | the root output written so far, shared at every level |
+
+`source` is the moving part. At the top it is the whole input; a descriptor's
+`source:` narrows it; under `each` it is the current element; after a plugin
+it is that plugin's result. `target` moves too (nested mappings build into a
+fresh target per level), while `input` and `output` always name the roots:
+
+```yaml
+/currency: /currency
+/rows:
+  source: /items
+  each:
+    /n: /n
+    /currency: { output: /currency }
+    /copy: { target: /n }
+```
+
+```json
+{ "currency": "EUR", "items": [{ "n": 1 }, { "n": 2 }] }
+```
+
+produces:
+
+```json
+{
+  "currency": "EUR",
+  "rows": [
+    { "n": 1, "currency": "EUR", "copy": 1 },
+    { "n": 2, "currency": "EUR", "copy": 2 }
+  ]
+}
+```
+
+Inside each element, `/n` reads the element (the pipeline value), `output:
+/currency` reads what the first pairing already wrote at the root, and
+`target: /n` reads the element's own object under construction. An `output:`
+read sees only completed pairings: the `/rows` array is still being built, so
+`/rows/0/n` would read nothing from inside it. For why the scopes work this
+way, see [Where values come from](/mapper/explanation/evaluation-scopes/).
+
 ## The envelope
 
 An invocation returns the output with two bookkeeping keys merged in:

@@ -1,0 +1,93 @@
+# Runnable examples on the mapping-validation reference page. Change-together
+# rule: page and cases change in the same commit.
+page: src/content/docs/reference/validation.md
+cases:
+  - name: a clean wrapped document reports valid with empty arrays
+    validate: document
+    mapping:
+      mapping:
+        /name: { source: /user/name, type: string, required: true }
+    report: { valid: true, errors: [], warnings: [] }
+
+  - name: a malformed operand is a well-formedness error
+    validate: document
+    mapping:
+      mapping:
+        /year: { source: /published, as: integer }
+    report:
+      valid: false
+      errors:
+        - rule: KW-pipeline-1
+          message: as must be string, number, boolean, or json
+          pointer: /mapping/~1year/as
+          descriptor: integer
+      warnings: []
+
+  - name: an unregistered transformer name is a reachability error
+    validate: instance
+    mapping:
+      mapping:
+        /slug: { source: /title, transform: sluggify }
+    report:
+      valid: false
+      errors:
+        - rule: KW-transform-1
+          message: sluggify matches no registered transformer
+          pointer: /mapping/~1slug/transform
+          descriptor: sluggify
+      warnings: []
+
+  - name: the corrected name validates clean against the same instance
+    validate: instance
+    mapping:
+      mapping:
+        /slug: { source: /title, transform: slugify }
+    report: { valid: true, errors: [], warnings: [] }
+
+  - name: an inert descriptor key warns at the instance level
+    validate: instance
+    mapping:
+      mapping:
+        /v: { source: /a, wibble: { k: 1 } }
+    report:
+      valid: true
+      errors: []
+      warnings:
+        - rule: KW-2
+          message: wibble matches no keyword or registered extension
+          pointer: /mapping/~1v/wibble
+          descriptor: { k: 1 }
+
+  - name: a top-level pairing writing an envelope key warns
+    validate: document
+    mapping:
+      mapping:
+        /valid: /a
+    report:
+      valid: true
+      errors: []
+      warnings:
+        - rule: CTX-3
+          message: a top level pairing writes an envelope key
+          pointer: /mapping/~1valid
+          descriptor: /valid
+
+  # the caution: validate does not wrap bare pairing maps the way map does
+  - name: a bare pairing map is not traversed at the document level
+    validate: document
+    mapping:
+      /year: { source: /published, as: integer }
+    report: { valid: true, errors: [], warnings: [] }
+
+  - name: a bare pairing map draws per-pairing warnings at the instance level
+    validate: instance
+    mapping:
+      /name: /name
+    report:
+      valid: true
+      errors: []
+      warnings:
+        - rule: KW-2
+          message: /name matches no keyword or registered extension
+          pointer: /~1name
+          descriptor: /name
