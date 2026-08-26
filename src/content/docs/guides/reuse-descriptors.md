@@ -2,7 +2,7 @@
 title: Reuse and compose mappings
 description: Name mappings with $id, reference them with $ref, and inherit pairings with $extend.
 sidebar:
-  order: 5
+  order: 6
 ---
 
 To reuse a mapping, register it and reference it by name. Registered mappings

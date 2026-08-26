@@ -2,7 +2,7 @@
 title: These docs and the specification
 description: What is normative where.
 sidebar:
-  order: 5
+  order: 9
 ---
 
 Mapper has two written surfaces with different jobs.

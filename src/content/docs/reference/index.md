@@ -16,11 +16,19 @@ prescribes.
 - [JSON Pointer profile](/mapper/reference/json-pointer/): pointers, write
   semantics, array writes, relative references.
 - [Context and envelope](/mapper/reference/context/): the evaluator's working
-  state and the result shape.
-- [Error model](/mapper/reference/errors/): accumulation, short-circuit, and
-  error-object anatomy.
-- [Mapper class API](/mapper/reference/api/): construction and the `map`
-  method.
+  state, the scopes, and the result shape.
+- [Error model](/mapper/reference/errors/): evaluation errors vs validation
+  reports, accumulation, short-circuit.
+- [Mapping validation](/mapper/reference/validation/): the validate
+  operation, the report, and diagnostic anatomy.
+- [Mapper class API](/mapper/reference/api/): construction, `map`, and
+  `validate`.
+- [Request plugin](/mapper/reference/request-plugin/): mapper-request
+  configuration, descriptor surface, and the parse envelope.
+- [HTTP API](/mapper/reference/http-api/): the mapper-http endpoints and
+  status codes.
+- [HTTP server configuration](/mapper/reference/http-configuration/): the
+  mapper-http environment, mapping sources, and options.
 - [Conformance](/mapper/reference/conformance/): tiers, the spec, and the
   test suites.
 

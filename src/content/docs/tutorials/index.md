@@ -15,6 +15,12 @@ that works, and each builds on the one before it:
    order matters.
 3. [Extending the mapper](/mapper/tutorials/extending-the-mapper/): put your
    own transformers and async plugins in the pipeline.
+4. [Catching mistakes before they run](/mapper/tutorials/validating-mappings/):
+   find a broken mapping's problems with validation, then gate evaluation
+   on a clean report.
+5. [Your first mapping server](/mapper/tutorials/first-mapping-server/): run
+   the mapper-http image, serve your own mapping, and check documents
+   against the live server.
 
 Every code sample in these lessons is executed against the published engine
 by the site's test suite.

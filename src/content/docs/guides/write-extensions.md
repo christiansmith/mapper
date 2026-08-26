@@ -2,7 +2,7 @@
 title: Write a transformer, initializer, or plugin
 description: The three extension interfaces, their signatures, and when each runs.
 sidebar:
-  order: 6
+  order: 7
 ---
 
 Extensions are host functions the mapping document calls by name. There are

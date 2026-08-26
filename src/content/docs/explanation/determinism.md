@@ -2,7 +2,7 @@
 title: Determinism and portability
 description: When the same mapping gives the same answer, and what carries across implementations.
 sidebar:
-  order: 4
+  order: 6
 ---
 
 ## Determinism

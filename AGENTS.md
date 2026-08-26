@@ -28,12 +28,27 @@ content is hand-authored — don't reflow it mechanically.
 - **Review before commit.** The maintainer reviews every change before it is
   committed. Do not commit or push without an explicit go-ahead.
 - **Examples are executable.** Every runnable example on a docs page has a
-  matching case in `test/cases/*.yaml` (one file per page; `page:` names the
-  source file). `deno task test` runs each case against the pinned, published
-  `@christiansmith/mapper-js` release. A page's example and its case change
-  together, in the same commit — never edit one without the other.
-- **Pinned engine.** The mapper-js version in `deno.json` imports is exact.
-  Bumping it is a deliberate act, not a side effect.
+  matching case (one file per page; `page:` names the source file).
+  `deno task test` runs each case against the pinned, published releases. A
+  page's example and its case change together, in the same commit — never
+  edit one without the other. Three corpora, by what the example needs:
+  - `test/cases/*.yaml` — engine examples, run by `test/run.test.js`
+    against `@christiansmith/mapper-js`. Evaluation cases
+    (`mapping`/`input`/`output` or `errors`) and mapping-validation cases
+    (`validate: document | instance` with a `report`).
+  - `test/request-cases/*.yaml` — request-plugin examples, run by
+    `test/request.test.js` against `@christiansmith/mapper-request` with a
+    local fixture server standing in for `https://api.example.test`.
+  - `test/http/verified.yaml` — mapper-http exchanges cannot run inside
+    `deno task test` (they need a running server), so they are
+    **release-verified**: on every mapper-http version bump, replay each
+    exchange against the released server and update the stamp. A page's
+    exchange and its entry change together.
+- **Pinned engines.** The `@christiansmith/mapper-js` and
+  `@christiansmith/mapper-request` versions in `deno.json` imports are
+  exact. Bumping either is a deliberate act, not a side effect. (JSR's
+  dependency-age gate can refuse a fresh release for ~72 h; the install
+  steps pass `--minimum-dependency-age=0`.)
 - **Synthetic examples only.** No example data derived from real deployments,
   clients, or third parties.
 - **Internal links include the base.** Write every internal link

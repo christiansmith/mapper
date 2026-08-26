@@ -2,7 +2,7 @@
 title: Handle errors
 description: Read the envelope, interpret error objects, and deal with throwing plugins.
 sidebar:
-  order: 8
+  order: 9
 ---
 
 Every invocation returns the output with two bookkeeping keys merged in:
