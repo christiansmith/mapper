@@ -1,0 +1,91 @@
+# Runnable examples on the request-plugin reference page, executed by
+# test/request.test.js against the published mapper-request release with a
+# local fixture server standing in for https://api.example.test.
+# Change-together rule: page and cases change in the same commit.
+page: src/content/docs/reference/request-plugin.md
+cases:
+  - name: search substitutes named params from the pipeline value
+    fixtures:
+      /things?q=maps: { results: [On Mapping] }
+    mapping:
+      /params/term: /q
+      /results:
+        output: /params
+        request:
+          origin: https://api.example.test
+          pathname: /things
+          search: { q: term }
+          pointer: /json/results
+    input:
+      q: maps
+    output:
+      params: { term: maps }
+      results: [On Mapping]
+
+  - name: a POST body is a mapping, and its pairings write through
+    fixtures:
+      /things: { echo: true }
+    mapping:
+      /created:
+        request:
+          origin: https://api.example.test
+          pathname: /things
+          method: POST
+          body:
+            mapping:
+              /name: /draft/title
+          pointer: /json/body
+    input:
+      draft: { title: Ada }
+    output:
+      name: Ada
+      created: { name: Ada }
+
+  - name: an empty allowHeaders list keeps descriptor headers off the wire
+    config:
+      allowHeaders: []
+    fixtures:
+      /echo: { echo: true }
+    mapping:
+      /reflected:
+        request:
+          origin: https://api.example.test
+          pathname: /echo
+          headers: { x-api-key: k123 }
+          pointer: /json/headers/x-api-key
+    input: {}
+    output: {}
+
+  - name: allowHeaders true forwards the descriptor header
+    fixtures:
+      /echo: { echo: true }
+    mapping:
+      /reflected:
+        request:
+          origin: https://api.example.test
+          pathname: /echo
+          headers: { x-api-key: k123 }
+          pointer: /json/headers/x-api-key
+    input: {}
+    output:
+      reflected: k123
+
+  - name: an oversize response body rejects at the cap
+    config:
+      maxResponseBytes: 16
+    fixtures:
+      /big: { padding: 'well over sixteen bytes of payload' }
+    mapping:
+      /v: { request: { origin: https://api.example.test, pathname: /big } }
+    input: {}
+    rejects: Response exceeds 16 bytes
+
+  - name: a stalled upstream rejects at the timeout
+    config:
+      timeoutMs: 100
+    fixtures:
+      /slow: { delay: 500, body: {} }
+    mapping:
+      /v: { request: { origin: https://api.example.test, pathname: /slow } }
+    input: {}
+    rejects: Request timed out after 100 ms

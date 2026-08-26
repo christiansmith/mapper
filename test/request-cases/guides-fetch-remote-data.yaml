@@ -1,0 +1,56 @@
+# Runnable request-plugin examples in the fetch-remote-data guide, executed
+# by test/request.test.js against the published mapper-request release with a
+# local fixture server standing in for https://api.example.test.
+# Change-together rule: page and cases change in the same commit.
+page: src/content/docs/guides/fetch-remote-data.md
+cases:
+  - name: pairings build the request, the plugin fetches and narrows to /json
+    fixtures:
+      /books/b1: { title: On Mapping, year: 1998 }
+    mapping:
+      /params/id: /request/bookId
+      /book:
+        output: /params
+        request:
+          origin: https://api.example.test
+          pathname: /books/{{id}}
+          pointer: /json
+    input:
+      request: { bookId: b1 }
+    output:
+      params: { id: b1 }
+      book: { title: On Mapping, year: 1998 }
+
+  - name: the scoped url form fetches a URL that arrives as data
+    fixtures:
+      /feed: { items: [1, 2] }
+    mapping:
+      /feed:
+        source: /feedUrl
+        request:
+          url: { source: '' }
+          pointer: /json
+    input:
+      feedUrl: https://api.example.test/feed
+    output:
+      feed: { items: [1, 2] }
+
+  - name: checkUrl refuses an internal destination before any connection
+    config:
+      checkUrl: refuse-private
+    fixtures:
+      /feed: { items: [1, 2] }
+    mapping:
+      /v: { source: /u, request: { url: { source: '' } } }
+    input:
+      u: https://api.example.test/feed
+    rejects: 'Refused destination: https://api.example.test/feed'
+
+  - name: a redirecting upstream is refused with the target named
+    fixtures:
+      /moved: { redirect: /elsewhere }
+    mapping:
+      /v: { source: /u, request: { url: { source: '' } } }
+    input:
+      u: https://api.example.test/moved
+    rejects: 'Redirect refused: https://api.example.test/moved responded 302 to /elsewhere'
