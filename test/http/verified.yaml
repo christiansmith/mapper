@@ -1,0 +1,39 @@
+# HTTP exchanges shown in the docs, verified against the published
+# @christiansmith/mapper-http release. These cannot run inside `deno task
+# test` (they need a running server), so they are release-verified instead:
+# on every mapper-http version bump, replay each exchange against the
+# released server and update the stamp. A page's exchange and its entry here
+# change together, in the same commit.
+verified:
+  package: '@christiansmith/mapper-http'
+  version: 0.3.1
+  date: 2026-08-26
+  method: >
+    Server run from the v0.3.1 source tag (the published image wraps the same
+    entrypoint); each request below replayed with curl and the response
+    compared to the page verbatim (requestId values vary per request).
+exchanges:
+  - page: src/content/docs/guides/serve-over-http.md
+    requests:
+      - POST /map with registered id greet → 200 envelope as data
+      - GET /extensions → stock surface names (plugins [request])
+      - GET /health/mapping → 200 status ok
+  - page: src/content/docs/guides/validate-over-http.md
+    requests:
+      - POST /validate with slugify document → 200 report, KW-transform-1 against the stock surface
+      - POST /validate with registered id → 200 clean report
+      - POST /map explicit form, enabled → 200 envelope
+      - POST /map explicit form, disabled → 403 Forbidden with the explicit-form message
+      - POST /map explicit form, invalid document → 422 InvalidMappingDocument carrying the report
+  - page: src/content/docs/tutorials/first-mapping-server.md
+    requests:
+      - POST /map with registered id greet → 200 envelope
+      - POST /map with directory-registered id book → 200 envelope (MAPPINGS directory source)
+      - GET /extensions → stock surface names
+      - POST /validate with slugify document → 200 report, KW-transform-1
+      - POST /map explicit form, enabled → 200 envelope
+  - page: src/content/docs/reference/http-api.md
+    requests:
+      - POST /map with unknown id → 404 NotFound naming the id
+      - GET /mappings → registered documents keyed by $id
+      - GET /health → 200 status ok
