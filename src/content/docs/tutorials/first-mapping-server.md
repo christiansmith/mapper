@@ -145,5 +145,5 @@ claims, and what to enable for whom) are on [HTTP server
 configuration](/mapper/reference/http-configuration/) and [Serving
 mappings](/mapper/explanation/serving-mappings/).
 
-All exchanges in this tutorial were verified against the published `0.3.1`
+All exchanges in this tutorial were verified against the published `0.3.2`
 server.

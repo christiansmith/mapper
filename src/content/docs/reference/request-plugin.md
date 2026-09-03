@@ -26,14 +26,35 @@ may be authored by callers; configuration only by the deployment.
 | Option | Meaning | Default |
 |---|---|---|
 | `timeoutMs` | abort the request after this many ms; covers the response body as well as the headers | `10000` |
+| `redirect` | `'refuse'` rejects every redirect response; `'follow'` enables bounded following (below) | `'refuse'` |
+| `maxRedirects` | under `'follow'`, the hop bound: an integer from 0 to 20 | `2` |
+| `redirectHttpsUpgrade` | under `'follow'`, also allow the http→https upgrade of the identical hostname on default ports | `true` |
 | `allowHeaders` | descriptor-header forwarding: `true` forwards all, a list forwards only the named headers (case-insensitive) | `true` |
 | `checkUrl` | called with the resolved URL before any connection; throw to refuse | none |
 | `maxResponseBytes` | reject response bodies over this size, during the stream read | none |
 
-Redirect responses (301, 302, 303, 307, 308) are always refused, with the
-target named in the error. A refused request, a timeout, and an oversize
-response all throw: they are host failures, not mapping errors (see the
-[error model](/mapper/reference/errors/)).
+Redirect responses (301, 302, 303, 307, 308) are refused by default, with
+the target named in the error. The refusal is typed: the error carries
+`code: 'E_REDIRECT_REFUSED'`, the response `status`, and the `location`
+target, so a host can classify it without parsing the message. A refused
+request, a timeout, and an oversize response all throw: they are host
+failures, not mapping errors (see the [error
+model](/mapper/reference/errors/)).
+
+### Following redirects
+
+`redirect: 'follow'` is a deployment decision, and following is deliberately
+narrow: GET requests only, at most `maxRedirects` hops, and targets
+restricted to the same origin — plus, under `redirectHttpsUpgrade`, the
+http→https upgrade of the identical hostname on default ports (the
+downgrade direction never follows). Every redirect target re-passes
+`checkUrl` before it is fetched, so destination policy holds across a chain
+exactly as it holds for a directly submitted URL. Anything outside those
+bounds refuses with the same typed error. The policy values are validated
+at construction: a `maxRedirects` that is not an integer in range, or a
+non-boolean `redirectHttpsUpgrade`, fails loudly instead of weakening the
+bound. (Following requires the static `URL.parse` — Deno ≥ 1.43,
+Node ≥ 22.1.)
 
 ## Descriptor surface
 
@@ -131,6 +152,29 @@ descriptor-authored header never reaches the wire:
 
 writes nothing under that configuration, and `"k123"` under
 `allowHeaders: true`.
+
+Bounded following in action: many hosts canonicalize URLs with a redirect,
+most commonly to a trailing-slash form. Under the default policy that fetch
+refuses; a deployment built with `redirect: 'follow'` resolves it:
+
+```yaml
+/article:
+  request:
+    origin: https://api.example.test
+    pathname: /article
+    pointer: /json
+```
+
+against an endpoint that redirects `/article` to `/article/` writes what the
+canonical URL returns:
+
+```json
+{ "article": { "title": "On Mapping" } }
+```
+
+The same mapping under `redirect: 'refuse'` (the default) rejects with
+`Redirect refused: https://api.example.test/article responded 302 to
+/article/`.
 
 Size and time bounds reject rather than degrade: an oversize body rejects
 with `Response exceeds <n> bytes`, a stalled upstream with `Request timed

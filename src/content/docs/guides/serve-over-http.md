@@ -95,7 +95,7 @@ That list is what mapping authors write against, and what
 [instance-level validation](/mapper/guides/validate-over-http/) checks
 their documents against.
 
-All exchanges on this page were verified against the published `0.3.1`
+All exchanges on this page were verified against the published `0.3.2`
 server. For callers submitting their own mapping documents (the explicit
 form and the validation endpoint) continue with [Validate and submit
 mappings over HTTP](/mapper/guides/validate-over-http/).

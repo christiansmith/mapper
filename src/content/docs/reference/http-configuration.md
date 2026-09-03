@@ -71,12 +71,17 @@ see [Serving mappings](/mapper/explanation/serving-mappings/).
 
 ## The image
 
-`ghcr.io/christiansmith/mapper-http` tags track releases (`0.3`, `0.3.1`,
+`ghcr.io/christiansmith/mapper-http` tags track releases (`0.3`, `0.3.2`,
 `latest`). The container runs as `USER deno`, and its `HEALTHCHECK` targets
 `GET /health/mapping`. The stock surface builds the request plugin with an
 empty header allowlist, so no caller-supplied request header is forwarded
-upstream.
+upstream, and with the default redirect policy, so redirects refuse. A
+deployment opts in to [bounded
+following](/mapper/reference/request-plugin/) by building its own plugin
+instance in its extensions module
+(`createRequest({ allowHeaders: [], redirect: 'follow' })`) — the policy
+travels with the surface, not the mapping.
 
-This page describes the published `0.3.1` release; the normative contract
+This page describes the published `0.3.2` release; the normative contract
 is the `SPEC.md` in the
 [mapper-http repository](https://github.com/christiansmith/mapper-http).

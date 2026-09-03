@@ -47,9 +47,13 @@ mean and how far they reach. The names are portable; the reach is local.
 The request plugin's fixed behaviors follow one rule: when data steers a
 request, hold the boundary at a point data cannot reach.
 
-- **Redirects are refused**, always. The upstream chooses the redirect
-  target; following it would let a response steer the request somewhere the
-  deployment never approved.
+- **Redirects are refused by default.** The upstream chooses the redirect
+  target; following it blindly would let a response steer the request
+  somewhere the deployment never approved. The one relaxation is itself
+  policy at construction: `redirect: 'follow'` follows a bounded chain
+  (GET-only, capped hops, same-origin plus the https upgrade of the same
+  host), and every hop's target re-passes `checkUrl` before it is fetched —
+  the response proposes, the deployment's own policy still disposes.
 - **`checkUrl` sees the final URL** before any connection. For deployments
   that [fetch URLs arriving as data](/mapper/guides/fetch-remote-data/),
   the useful posture is a network-position guard (refuse loopback,

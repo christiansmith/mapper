@@ -112,5 +112,5 @@ Why the endpoint is shaped this way, and what the validate-but-never-map
 posture is for, is on [Serving
 mappings](/mapper/explanation/serving-mappings/).
 
-All exchanges on this page were verified against the published `0.3.1`
+All exchanges on this page were verified against the published `0.3.2`
 server.

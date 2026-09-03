@@ -150,16 +150,25 @@ const request = mapperRequest.createRequest({
 ```
 
 With that policy, a mapping steered at an internal address fails with the
-refusal instead of fetching. Redirects are refused outright, because the upstream
-chooses the redirect target and following one would defeat exactly this
-boundary:
+refusal instead of fetching. Redirects are refused by default, because the
+upstream chooses the redirect target and following one blindly would defeat
+exactly this boundary:
 
 ```yaml
 /v: { source: /u, request: { url: { source: '' } } }
 ```
 
 with `/u` pointing at a redirecting endpoint rejects with `Redirect refused:
-https://api.example.test/moved responded 302 to /elsewhere`. A `checkUrl`
-string check is the cheap gate; network egress rules are the robust wall.
-The rationale is on [Policy at
+https://api.example.test/moved responded 302 to /elsewhere`.
+
+A deployment can opt in to bounded following (`redirect: 'follow'`) without
+giving that boundary up: following is GET-only, capped at `maxRedirects`
+hops, restricted to same-origin targets (plus the http→https upgrade of the
+same host), and **every redirect target re-passes `checkUrl` before it is
+fetched** — so the destination policy above holds across a chain exactly as
+it holds for the URL the mapping submitted. The full option surface is on
+the [request plugin reference](/mapper/reference/request-plugin/).
+
+A `checkUrl` string check is the cheap gate; network egress rules are the
+robust wall. The rationale is on [Policy at
 construction](/mapper/explanation/policy-at-construction/).

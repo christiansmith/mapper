@@ -6,10 +6,10 @@
 # change together, in the same commit.
 verified:
   package: '@christiansmith/mapper-http'
-  version: 0.3.1
-  date: 2026-08-26
+  version: 0.3.2
+  date: 2026-09-03
   method: >
-    Server run from the v0.3.1 source tag (the published image wraps the same
+    Server run from the v0.3.2 source tag (the published image wraps the same
     entrypoint); each request below replayed with curl and the response
     compared to the page verbatim (requestId values vary per request).
 exchanges:
@@ -37,3 +37,4 @@ exchanges:
       - POST /map with unknown id → 404 NotFound naming the id
       - GET /mappings → registered documents keyed by $id
       - GET /health → 200 status ok
+      - POST /map whose mapping fetches a redirecting upstream → 422 RedirectRefused with the target under location

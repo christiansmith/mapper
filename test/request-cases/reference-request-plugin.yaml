@@ -89,3 +89,31 @@ cases:
       /v: { request: { origin: https://api.example.test, pathname: /slow } }
     input: {}
     rejects: Request timed out after 100 ms
+
+  - name: bounded follow resolves a canonicalizing redirect
+    config:
+      redirect: follow
+    fixtures:
+      /article: { redirect: /article/ }
+      /article/: { title: On Mapping }
+    mapping:
+      /article:
+        request:
+          origin: https://api.example.test
+          pathname: /article
+          pointer: /json
+    input: {}
+    output:
+      article: { title: On Mapping }
+
+  - name: the default policy refuses the same redirect
+    fixtures:
+      /article: { redirect: /article/ }
+    mapping:
+      /article:
+        request:
+          origin: https://api.example.test
+          pathname: /article
+          pointer: /json
+    input: {}
+    rejects: Redirect refused

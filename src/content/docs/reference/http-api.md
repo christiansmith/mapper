@@ -70,9 +70,15 @@ container `HEALTHCHECK` targets it.
 
 Server errors are `{ "code", "message", "requestId" }` with status 400,
 401, 403, 404, 405, 413, 422, 500, or 503. A 422 `InvalidMappingDocument`
-carries the full validation report under `report`. Mapping results,
-including `valid: false` results, are data at 200, not errors; the
-distinction is the same one the engine draws in the [error
+carries the full validation report under `report`. A 422 `RedirectRefused`
+is returned when the request plugin's redirect policy declines to follow an
+upstream redirect during a mapping: the message names the URL and target,
+and the refused target is carried under `location` — key on `code` and
+`location`, not the message. (Before `0.3.2` this surfaced as a 500.)
+Untyped upstream failures — timeouts, connection errors — remain 500s, so
+the two conditions are distinguishable. Mapping results, including
+`valid: false` results, are data at 200, not errors; the distinction is the
+same one the engine draws in the [error
 model](/mapper/reference/errors/).
 
 The write namespace `POST`/`PUT`/`DELETE /mappings/*` is reserved for
@@ -80,4 +86,4 @@ future persistence operations and returns 404 in `0.3`.
 
 The normative contract is the `SPEC.md` in the
 [mapper-http repository](https://github.com/christiansmith/mapper-http);
-this page describes the published `0.3.1` release.
+this page describes the published `0.3.2` release.
